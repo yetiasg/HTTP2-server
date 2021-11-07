@@ -1,0 +1,11 @@
+version: '3.9'
+services: 
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - .:/app
+    ports:
+      - 8443:8443

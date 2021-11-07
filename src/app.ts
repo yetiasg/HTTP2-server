@@ -8,7 +8,7 @@ import { config } from './config'
 const server = http2.createSecureServer({
   "key": "",
   "cert": ""
-})
+}) 
 
 server.on('stream', (stream, headers) => {
   stream.respond({
@@ -22,15 +22,15 @@ server.on('stream', (stream, headers) => {
   }))
 })
 
-// const app = express()
-// app.use(express.json())
-// app.use(cors({origin: '*'}))
-// app.use(morgan('dev'))
+const app = express()
+app.use(express.json())
+app.use(cors({origin: '*'}))
+app.use(morgan('dev'))
 
-// app.get('/', (req:Req, res:Res, next:Next) => {
-//   res.status(200).json({message: 'Root route'})
-// })
+app.get('/', (req:Req, res:Res, next:Next) => {
+  res.status(200).json({message: 'Root route'})
+})
 
-server.listen(config.server.PORT, () => {
+app.listen(config.server.PORT, () => {
   console.log(`App listening on port ${config.server.PORT}`)
 })
