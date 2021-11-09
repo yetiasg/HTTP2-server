@@ -1,6 +1,6 @@
 version: '3.9'
 services: 
-  server:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,3 +9,25 @@ services:
       - .:/app
     ports:
       - 8443:8443
+
+  nginx:
+    image: nginx
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./cert/nginx:/etc/nginx/conf.d
+      - ./cert/certbot/conf:/etc/letsencrypt
+      - ./cert/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./cert/certbot/conf:/etc/letsencrypt
+      - ./cert/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
