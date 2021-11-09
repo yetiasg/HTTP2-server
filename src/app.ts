@@ -6,8 +6,8 @@ import cors from 'cors'
 import { config } from './config'
 
 const server = http2.createSecureServer({
-  "key": "",
-  "cert": ""
+  "key": fs.readFileSync('/etc/letsencrypt/live/mztestinghost.hopto.org/privkey.pem'),
+  "cert": fs.readFileSync('/etc/letsencrypt/live/mztestinghost.hopto.org/fullchain.pem')
 }) 
 
 server.on('stream', (stream, headers) => {
@@ -34,3 +34,8 @@ app.get('/', (req:Req, res:Res, next:Next) => {
 app.listen(config.server.PORT, () => {
   console.log(`App listening on port ${config.server.PORT}`)
 })
+
+// ssl_certificate /etc/letsencrypt/live/mztestinghost.hopto.org/fullchain.pem;
+// ssl_certificate_key /etc/letsencrypt/live/mztestinghost.hopto.org/privkey.pem;
+// include /etc/letsencrypt/options-ssl-nginx.conf;
+// ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
